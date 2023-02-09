@@ -1,40 +1,53 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
+use App\Services\Auth\AuthService;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Laravel\Socialite\Facades\Socialite;
+use Laravel\Socialite\Contracts\Provider;
+use Laravel\Socialite\Two\User as SocialiteUser;
 
 class LoginController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
-    |
-    */
-
     use AuthenticatesUsers;
 
-    /**
-     * Where to redirect users after login.
-     *
-     * @var string
-     */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    private Provider $provider;
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    public function __construct(private readonly AuthService $authService)
     {
-        $this->middleware('guest')->except('logout');
+        $this->provider = Socialite::driver('google');
+    }
+
+    final public function loginWithGoogle(): RedirectResponse
+    {
+        return $this->provider->redirect();
+    }
+
+    final public function callbackFromGoogle(): RedirectResponse
+    {
+        /** @var SocialiteUser $googleUser */
+        $googleUser = $this->provider->stateless()->user();
+        auth()->login($this->authService->getUser($googleUser), true);
+
+        return redirect(config('app.url'));
+    }
+
+    final public function logout(Request $request): RedirectResponse
+    {
+        $this->guard()->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        if ($response = $this->loggedOut($request)) {
+            return $response;
+        }
+
+        return redirect(config('app.url'));
     }
 }

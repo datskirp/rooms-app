@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Auth\LoginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -11,12 +13,21 @@ use Illuminate\Support\Facades\Route;
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
 |
-*/
-
 Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes();
+*/
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::prefix('login/google')->name('google.')->group(function () {
+    Route::post('', [LoginController::class, 'loginWithGoogle'])->name('login');
+    Route::get('callback', [LoginController::class, 'callbackFromGoogle'])->name('callback');
+});
+
+Route::post('logout', [LoginController::class, 'logout'])->name('logout');
+
+/* vue */
+Route::any('{all}', function () {
+    $user = Auth::user();
+    return view('vue')->with(compact('user'));
+})->where(['all' => '.*']);

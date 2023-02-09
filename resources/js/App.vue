@@ -1,13 +1,20 @@
 <template>
-    <h1> Hello, Vuejs with Laravel </h1>
+    <router-view />
 </template>
 
 <script>
 export default {
-    name: "App"
-}
+    name: 'App',
+    mounted() {
+        if (!window.Laravel.user) {
+            this.$router.push({
+                name: 'login',
+            });
+        }
+    },
+};
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 
 </style>
