@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Api\v1;
 
+use App\Exceptions\NotFoundException;
 use App\Http\Controllers\Controller;
 use App\Models\Room;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
-class RoomController extends Controller
+class RoomController extends ApiController
 {
     /**
      * Display a listing of the resource.
@@ -28,7 +30,22 @@ class RoomController extends Controller
      */
     public function create()
     {
-
+        try {
+            $resumeResource = $this->resumeService->createResume(
+                $request->validated(),
+            );
+            return $this->successResponse(
+                data: $resumeResource->resolve(),
+                code: Response::HTTP_CREATED,
+            );
+        } catch (NotFoundException $error) {
+            return $this->clientErrorsResponse(
+                message: $error->getMessage(),
+                code: Response::HTTP_NOT_FOUND,
+            );
+        } catch (Exception $error) {
+            return $this->serverErrorResponse();
+        }
     }
 
     /**

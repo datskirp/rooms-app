@@ -34,8 +34,8 @@ class LoginController extends Controller
     {
         /** @var SocialiteUser $googleUser */
         $googleUser = Socialite::driver('google')->user();
-        //auth()->login($this->authService->getUser($googleUser), true);
-        dd($googleUser);
+        auth()->login($this->authService->getUser($googleUser), true);
+
         return redirect(config('app.url'));
     }
 

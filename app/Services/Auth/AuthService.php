@@ -20,9 +20,7 @@ class AuthService
         $firstname = $socialiteUser->user['given_name'];
         $lastName = $socialiteUser->user['family_name'];
         $email = $socialiteUser->getEmail();
-
         $user = $this->userService->createUser($firstname, $lastName, $email);
-
 
         return $user;
     }

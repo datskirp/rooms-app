@@ -34,7 +34,7 @@ export default {
   mounted() {
     if (window.Laravel.user) {
       this.$router.push({
-        name: 'list',
+        name: 'room.add',
       });
     }
   },

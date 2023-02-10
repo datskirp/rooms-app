@@ -35,6 +35,6 @@ class Room extends Model
     // TODO: Проверить работу метода
     public function participants(): HasManyThrough
     {
-        return $this->hasManyThrough(User::class, RoomUser::class, 'room_id', 'id', 'id', 'user_email');
+        return $this->hasManyThrough(User::class, RoomUser::class, 'room_id', 'user_email', 'id', 'id');
     }
 }
