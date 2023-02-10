@@ -51,7 +51,18 @@
     <br>
     {{ users }}
     <br><br>
+    <div>
+        <AddUsers
+            data-type="text"
+            data-label="Add q"
+            data-placeholder="enter user's email"
+            :model-value="user"
+            @user-added="users.push($event)"
+        />
+    </div>
     <button @click="save">Create room</button>
+    <br><br>
+    {{ info }}
 
 
 
@@ -61,6 +72,7 @@
 <script>
     import InputText from "./UI/InputText.vue";
     import AddUsers from "./UI/AddUsers.vue";
+    import {toRaw} from "vue";
 
     export default {
         name: 'CreateRoom',
@@ -73,17 +85,21 @@
                 room: {},
                 user: null,
                 users: [],
+                info: null,
             }
         },
         methods: {
             save() {
-                this.room.users = this.users
-                this.axios.post(`/api/v1/rooms/`, this.room)
-                    .then(() => {
-                        this.$router.push({
-                            name: 'home',
-                        });
-                    })
+                const roomData = {
+                    ...this.room,
+                    users: toRaw(this.users),
+                    creator_id: window.Laravel.user.id,
+                };
+                console.log(roomData);
+                this.axios.post(`/api/v1/rooms/`, roomData)
+                    .then((response) => {
+                        this.info = response.data
+                        })
                     .catch(error => {
                         console.log(error.message);
                     });

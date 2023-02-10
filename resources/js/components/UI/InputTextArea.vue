@@ -1,47 +1,35 @@
 <template>
-    <div class="input">
+    <<div class="input">
         <label>{{ dataLabel }}</label>
         <br>
-        <input
+        <textarea
             v-model="localModelValue"
-            :required="required"
             :placeholder="dataPlaceholder"
             :name="dataName"
-            :type="dataType"
             @input="onTextChange"
-        >
+        ></textarea>
     </div>
 </template>
 
 <script>
 export default {
-    name: 'InputText',
+    name: "InputTextArea",
 
     props: {
-        modelValue: [String, Number],
         dataLabel: String,
-        dataName: String,
-        dataType: String,
         dataPlaceholder: String,
-        required: {
-            type: Boolean,
-            default: true,
-        },
+        dataName: String,
+        modelValue: String,
     },
     data() {
         return {
             localModelValue: this.modelValue,
         };
     },
-
-    methods: {
-        onTextChange() {
-            this.$emit('textChange', this.localModelValue);
-        },
-    },
 };
+
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 
 </style>

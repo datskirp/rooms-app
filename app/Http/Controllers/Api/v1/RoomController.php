@@ -4,13 +4,19 @@ namespace App\Http\Controllers\Api\v1;
 
 use App\Exceptions\NotFoundException;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AddRoomRequest;
 use App\Models\Room;
+use App\Services\RoomService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Exception;
 
 class RoomController extends ApiController
 {
+    public function __construct(private readonly RoomService $roomService)
+    {
+    }
     /**
      * Display a listing of the resource.
      *
@@ -28,16 +34,20 @@ class RoomController extends ApiController
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(AddRoomRequest $request): JsonResponse
     {
+        $roomResource = $this->roomService->createRoom(
+            $request->validated(),
+        );
+        return $this->successResponse(
+            data: $roomResource->resolve(),
+            code: Response::HTTP_CREATED,
+        );
+
         try {
-            $resumeResource = $this->resumeService->createResume(
-                $request->validated(),
-            );
-            return $this->successResponse(
-                data: $resumeResource->resolve(),
-                code: Response::HTTP_CREATED,
-            );
+
+
+
         } catch (NotFoundException $error) {
             return $this->clientErrorsResponse(
                 message: $error->getMessage(),
