@@ -20,7 +20,7 @@ Route::get('/', function () {
 */
 
 Route::prefix('login/google')->name('google.')->group(function () {
-    Route::post('', [LoginController::class, 'loginWithGoogle'])->name('login');
+    Route::get('', [LoginController::class, 'loginWithGoogle'])->name('login');
     Route::get('callback', [LoginController::class, 'callbackFromGoogle'])->name('callback');
 });
 

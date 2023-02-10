@@ -4,7 +4,7 @@
         Hello!
       <form
         v-if="!user"
-        method="POST"
+        method="GET"
         action="/login/google"
       >
         <div class="row mt-3">

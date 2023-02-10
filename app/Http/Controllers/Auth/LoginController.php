@@ -12,12 +12,13 @@ use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
 use Laravel\Socialite\Contracts\Provider;
 use Laravel\Socialite\Two\User as SocialiteUser;
+use Laravel\Socialite\Two\AbstractProvider;
 
 class LoginController extends Controller
 {
     use AuthenticatesUsers;
 
-    private Provider $provider;
+    private AbstractProvider $provider;
 
     public function __construct(private readonly AuthService $authService)
     {
@@ -26,15 +27,15 @@ class LoginController extends Controller
 
     final public function loginWithGoogle(): RedirectResponse
     {
-        return $this->provider->redirect();
+        return Socialite::driver('google')->redirect();
     }
 
     final public function callbackFromGoogle(): RedirectResponse
     {
         /** @var SocialiteUser $googleUser */
-        $googleUser = $this->provider->stateless()->user();
-        auth()->login($this->authService->getUser($googleUser), true);
-
+        $googleUser = Socialite::driver('google')->user();
+        //auth()->login($this->authService->getUser($googleUser), true);
+        dd($googleUser);
         return redirect(config('app.url'));
     }
 
