@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Http\Resources\RoomResource;
+use App\Models\Question;
 use App\Models\Room;
 use App\Models\RoomUser;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use function MongoDB\BSON\toJSON;
 
 class RoomService
 {
@@ -38,6 +38,12 @@ class RoomService
                 'room_id' => $id,
             ]);
         }
+    }
+
+    private function createQuestions(array $questions, int $room_id): Question
+    {
+
+
     }
     /**
      * @return array<string>

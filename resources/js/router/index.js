@@ -3,7 +3,6 @@ import LoginView from '../view/LoginView.vue';
 import HomeView from "../view/HomeView.vue";
 import CreateRoom from "../view/room/CreateRoomView.vue";
 import Home from "../view/Home.vue";
-import RoomQuestionAddView from "../view/room/RoomQuestionAddView.vue";
 
 const routes = [
   {
@@ -29,13 +28,6 @@ const routes = [
                     default: CreateRoom,
                 },
             },
-            {
-                path: 'room/:roomId(\\d+)/question/add/',
-                name: 'room.question.add',
-                components: {
-                    default: RoomQuestionAddView,
-                }
-            }
         ]
     }
 ];

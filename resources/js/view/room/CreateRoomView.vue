@@ -45,12 +45,18 @@
             data-label="Add users to the room"
             data-placeholder="enter user's email"
             :model-value="user"
-            @user-added="users.push($event)"
+            @user-added="room.users.push($event)"
         />
     </div>
     <br>
-    {{ users }}
+    {{ room.users }}
+    <br><br>
+    <input-question
+        @add-q-a="room.questions = $event"
+    />
     <br>
+    {{ room.questions }}
+    <br><br>
     <button @click="save">Create room</button>
     <br><br>
     {{ info }}
@@ -61,18 +67,23 @@
     import InputText from "../../components/UI/InputText.vue";
     import AddUsers from "../../components/UI/AddUsers.vue";
     import {toRaw} from "vue";
+    import InputQuestion from "../../components/UI/InputQuestion.vue";
 
     export default {
         name: 'CreateRoom',
         components: {
+            InputQuestion,
             AddUsers,
             InputText,
         },
         data () {
             return {
-                room: {},
+                room: {
+                    users: [],
+                    questions: [],
+                },
                 user: null,
-                users: [],
+                //users: [],
                 info: null,
             }
         },
@@ -80,11 +91,12 @@
             save() {
                 const roomData = {
                     ...this.room,
-                    users: toRaw(this.users),
                     creator_id: window.Laravel.user.id,
                 };
                 console.log(roomData);
-                this.promiseHandling(this.axios.post(`/api/v1/rooms/`, roomData));
+                console.log(toRaw(roomData.users));
+                console.log(toRaw(roomData.questions));
+                //this.promiseHandling(this.axios.post(`/api/v1/rooms/`, roomData));
             },
             promiseHandling(promise) {
                 promise
