@@ -10,7 +10,7 @@ class UserRoomQuestionAnswer extends Model
 {
     use HasFactory;
 
-    protected $table = 'user_room_question_answers';
+    protected $table = 'user_room_question_answer';
 
     protected $fillable = [
         'user_id',

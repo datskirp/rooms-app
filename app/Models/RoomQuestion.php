@@ -11,16 +11,5 @@ class RoomQuestion extends Model
 {
     use HasFactory;
 
-    protected $table = 'room_questions';
-
-    protected $fillable = [
-        'room_id',
-        'type',
-        'question',
-    ];
-
-    public function answers(): HasMany
-    {
-        return $this->hasMany(RoomQuestionAnswer::class);
-    }
+    protected $table = 'room_question';
 }

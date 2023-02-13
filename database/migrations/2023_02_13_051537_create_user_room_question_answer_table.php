@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained();
             $table->unsignedBigInteger('room_question_id');
-            $table->foreign('room_question_id')->references('id')->on('room_questions');
+            $table->foreign('room_question_id')->references('id')->on('room_question');
             $table->string('answer');
             $table->timestamps();
         });

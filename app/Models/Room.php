@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -27,9 +29,9 @@ class Room extends Model
         return $this->hasOne(User::class, 'id', 'user_id');
     }
 
-    public function questions(): HasMany
+    public function questions(): BelongsToMany
     {
-        return $this->hasMany(RoomQuestion::class);
+        return $this->belongsToMany(Question::class, 'room_question');
     }
 
     // TODO: Проверить работу метода

@@ -4,6 +4,7 @@
             data-label="Add a question"
             data-placeholder="Enter a question"
             :model-value="question"
+            @text-change="question = $event"
         />
     </div>
     <br>
@@ -12,14 +13,18 @@
             data-label="Add an answer"
             data-placeholder="Add an answer"
             :model-value="answer"
+            @text-change="answer = $event"
         />
     </div>
     <br>
-    <button @click="save">Add Q&A</button>
+    <button @click="saveQA">Add Q&A</button>
+    <br><br>
+    {{ dataQA }}
 </template>
 
 <script>
 import InputTextArea from "./InputTextArea.vue";
+import {toRaw} from "vue";
 
 export default {
     name: "InputQuestion",
@@ -30,11 +35,15 @@ export default {
         return {
             question: '',
             answer: '',
+            dataQA: [],
         };
     },
     methods: {
-      save() {
-          
+      saveQA() {
+        this.dataQA.push({question: this.question, answer: this.answer});
+        this.$emit('addQA', this.dataQA);
+        this.question = '';
+        this.answer = '';
       }
     },
 }

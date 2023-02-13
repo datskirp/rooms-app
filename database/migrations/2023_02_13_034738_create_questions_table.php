@@ -13,11 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('room_question_answers', function (Blueprint $table) {
+        Schema::create('questions', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('room_question_id');
-            $table->foreign('room_question_id')->references('id')->on('room_questions');
-            $table->string('answer');
+            $table->string('question');
+            $table->json('answer');
+            $table->tinyInteger('type');
+            $table->foreignId('user_id')->constrained();
+            $table->timestamps();
         });
     }
 
@@ -28,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('room_question_answers');
+        Schema::dropIfExists('questions');
     }
 };

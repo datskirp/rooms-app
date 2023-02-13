@@ -1,5 +1,5 @@
 <template>
-    <<div class="input">
+    <div class="input">
         <label>{{ dataLabel }}</label>
         <br>
         <textarea
@@ -19,12 +19,20 @@ export default {
         dataLabel: String,
         dataPlaceholder: String,
         dataName: String,
-        modelValue: String,
+        modelValue: {
+            type: [String],
+            default: '',
+        },
     },
     data() {
         return {
             localModelValue: this.modelValue,
         };
+    },
+    methods: {
+        onTextChange() {
+            this.$emit('textChange', this.localModelValue);
+        },
     },
 };
 

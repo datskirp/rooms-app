@@ -50,28 +50,16 @@
     </div>
     <br>
     {{ users }}
-    <br><br>
-    <div>
-        <AddUsers
-            data-type="text"
-            data-label="Add q"
-            data-placeholder="enter user's email"
-            :model-value="user"
-            @user-added="users.push($event)"
-        />
-    </div>
+    <br>
     <button @click="save">Create room</button>
     <br><br>
     {{ info }}
 
-
-
-
 </template>
 
 <script>
-    import InputText from "./UI/InputText.vue";
-    import AddUsers from "./UI/AddUsers.vue";
+    import InputText from "../../components/UI/InputText.vue";
+    import AddUsers from "../../components/UI/AddUsers.vue";
     import {toRaw} from "vue";
 
     export default {
@@ -96,12 +84,22 @@
                     creator_id: window.Laravel.user.id,
                 };
                 console.log(roomData);
-                this.axios.post(`/api/v1/rooms/`, roomData)
-                    .then((response) => {
-                        this.info = response.data
-                        })
-                    .catch(error => {
-                        console.log(error.message);
+                this.promiseHandling(this.axios.post(`/api/v1/rooms/`, roomData));
+            },
+            promiseHandling(promise) {
+                promise
+                    .then((res) => {
+                        if (res.data?.data?.id) {
+                            this.$router.push({
+                                name: 'room.question.add',
+                                params: {
+                                    roomId: res.data.data.id,
+                                },
+                            });
+                        }
+                    })
+                    .catch(() => {
+                        console.log('Could not create a new room');
                     });
             },
         },
