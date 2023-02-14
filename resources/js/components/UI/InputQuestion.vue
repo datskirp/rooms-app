@@ -47,12 +47,12 @@ export default {
         return {
             question: '',
             answer: '',
-            types: [
-                'Text',
-                'Code',
-                'Checkbox',
-                'Radio'
-            ],
+            types: {
+                'Text': 1,
+                'Code': 2,
+                'Checkbox': 3,
+                'Radio': 4,
+            },
             type: '',
             dataQA: [],
         };
@@ -60,8 +60,8 @@ export default {
     emits: ['addQA'],
     methods: {
       saveQA() {
-        this.dataQA.push({question: this.question, answer: this.answer, type: this.type, user: window.Laravel.user.id});
-        this.$emit('addQA', this.dataQA);
+        this.dataQA.push({question: this.question, answer: this.answer, type: this.type, user_id: window.Laravel.user.id});
+        this.$emit('addQuestion', this.dataQA);
         this.question = '';
         this.answer = '';
       }

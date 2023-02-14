@@ -22,6 +22,7 @@ class Room extends Model
         'start_on',
         'close_on',
         'user_id',
+        'link',
     ];
 
     public function owner(): HasOne

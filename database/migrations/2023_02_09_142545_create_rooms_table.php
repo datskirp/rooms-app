@@ -20,6 +20,7 @@ return new class extends Migration
             $table->date('start_on');
             $table->date('close_on');
             $table->foreignId('user_id')->constrained();
+            $table->string('link')->nullable();
             $table->timestamps();
         });
     }

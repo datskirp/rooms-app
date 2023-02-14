@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\v1\RoomController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\LoginController;
@@ -25,6 +26,8 @@ Route::prefix('login/google')->name('google.')->group(function () {
 });
 
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');
+
+Route::post('/rooms', [RoomController::class, 'create']);
 
 /* vue */
 Route::any('{all}', function () {

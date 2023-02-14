@@ -22,7 +22,9 @@ class RoomResource extends JsonResource
             'start_on' => $this->start_on,
             'close_on' => $this->close_on,
             'user_id' => $this->user_id,
+            'link' => $this->link,
             'participants' => RoomUser::where('room_id', $this->id)->get(),
+            'questions' => $this->questions,
         ];
     }
 }

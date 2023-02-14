@@ -52,7 +52,7 @@
     {{ room.users }}
     <br><br>
     <input-question
-        @add-q-a="room.questions = $event"
+        @add-question="room.questions = $event"
     />
     <br>
     {{ room.questions }}
@@ -96,17 +96,20 @@
                 console.log(roomData);
                 console.log(toRaw(roomData.users));
                 console.log(toRaw(roomData.questions));
-                //this.promiseHandling(this.axios.post(`/api/v1/rooms/`, roomData));
+                this.promiseHandling(this.axios.post(`/api/v1/rooms/`, roomData));  ///api/v1/rooms/
             },
             promiseHandling(promise) {
                 promise
                     .then((res) => {
                         if (res.data?.data?.id) {
                             this.$router.push({
-                                name: 'room.question.add',
+                                name: 'home',
+                                /*
                                 params: {
                                     roomId: res.data.data.id,
                                 },
+
+                                 */
                             });
                         }
                     })

@@ -17,7 +17,7 @@
       >{{ dataPlaceholder }}
       </option>
       <option
-        v-for="item in dataArray"
+        v-for="item in Object.keys(dataArray)"
         :key="item"
         :value="item"
       >
@@ -64,7 +64,7 @@ export default {
   },
   methods: {
     emitSelected() {
-      this.$emit('input', this.selected);
+      this.$emit('input', this.dataArray[this.selected]);
     },
   },
 };

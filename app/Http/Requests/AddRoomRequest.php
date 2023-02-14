@@ -26,11 +26,13 @@ class AddRoomRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string'],
-            'open_at' => ['required', 'date_format:H:i'],
+        ];
+    }
+}
+/*
+ 'open_at' => ['required', 'date_format:H:i'],
             'start_on' => ['required', 'date'],
             'close_on' => ['required', 'date'],
             'users' => [],
             'creator_id' => ['required', 'int'],
-        ];
-    }
-}
+ */

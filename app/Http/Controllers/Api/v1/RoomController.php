@@ -29,15 +29,11 @@ class RoomController extends ApiController
         return response()->json(['data' => $rooms]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    // TODO: provide validation rules
     public function create(AddRoomRequest $request): JsonResponse
     {
         $roomResource = $this->roomService->createRoom(
-            $request->validated(),
+            $request->post(),
         );
         return $this->successResponse(
             data: $roomResource->resolve(),

@@ -5,17 +5,15 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Http\Resources\RoomResource;
-use App\Models\Question;
 use App\Models\Room;
 use App\Models\RoomUser;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
 class RoomService
 {
-    public function createRoom(array $roomData): RoomResource
+    public function createRoom(array $roomData)
     {
         $room = Room::create([
             'name' => $roomData['name'],
@@ -23,9 +21,13 @@ class RoomService
             'start_on' => $roomData['start_on'],
             'close_on' => $roomData['close_on'],
             'user_id' => $roomData['creator_id'],
+            'link' => uniqid(),
         ]);
 
         $this->createRoomUsers($roomData['users'], $room->id);
+        $questionIds = $this->createQuestions($roomData['questions']);
+
+        $room->questions()->attach($questionIds);
 
         return new RoomResource($room);
     }
@@ -40,10 +42,14 @@ class RoomService
         }
     }
 
-    private function createQuestions(array $questions, int $room_id): Question
+    private function createQuestions(array $questions): array
     {
+        $questionIds = [];
+        foreach ($questions as $question) {
+            $questionIds[] = DB::table('questions')->insertGetId($question);
+        }
 
-
+        return $questionIds;
     }
     /**
      * @return array<string>
