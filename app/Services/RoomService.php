@@ -22,6 +22,7 @@ class RoomService
             'close_on' => $roomData['close_on'],
             'user_id' => $roomData['creator_id'],
             'link' => uniqid(),
+            'active' => 0,
         ]);
 
         $this->createRoomUsers($roomData['users'], $room->id);

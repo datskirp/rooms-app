@@ -21,6 +21,7 @@ return new class extends Migration
             $table->date('close_on');
             $table->foreignId('user_id')->constrained();
             $table->string('link')->nullable();
+            $table->tinyInteger('active');
             $table->timestamps();
         });
     }
