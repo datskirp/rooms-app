@@ -16,6 +16,7 @@
         </div>
         <br>
         <RoomQuestion v-if="allJoined"
+            :room-users="roomUsers.roomUsers"
             :room="room"
         />
 

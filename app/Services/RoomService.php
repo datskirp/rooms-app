@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Events\ParticipantJoined;
+use App\Events\UserAnswerSubmitted;
 use App\Exceptions\NotFoundException;
 use App\Http\Resources\RoomResource;
 use App\Http\Resources\UserRoomQuestionAnswerResource;
+use App\Models\ActiveRoom;
 use App\Models\Room;
 use App\Models\RoomQuestion;
 use App\Models\RoomUser;
@@ -92,6 +94,19 @@ class RoomService
             'room_question_id' => $roomQuestionId->id,
             'answer' => $answer['answer'],
         ]);
+
+        DB::table('active_rooms')->insert([
+            'room_id' => $answer['room_id'],
+            'user_id' => $answer['user_id'],
+            'question_id' => $answer['question_id'],
+            'answer' => true,
+        ]);
+
+        $activeRoom = ActiveRoom::where('room_id', $answer['room_id'])
+            ->where('question_id', $answer['question_id'])
+            ->get();
+        
+        broadcast(new UserAnswerSubmitted($activeRoom->toArray()));
 
         return new UserRoomQuestionAnswerResource($userRoomQuestionAnswer);
     }

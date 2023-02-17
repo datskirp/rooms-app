@@ -22,6 +22,7 @@ class UserRoomQuestionAnswerResource extends JsonResource
             'room_question_id' => $this->room_question_id,
             'answer' => $this->answer,
             'question_id' => RoomQuestion::find($this->room_question_id)->question_id,
+            'updated_at' => $this->updated_at,
         ];
     }
 }
