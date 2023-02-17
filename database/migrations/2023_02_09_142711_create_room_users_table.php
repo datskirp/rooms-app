@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('user_email');
             $table->foreignId('room_id')->constrained();
+            $table->boolean('active');
         });
     }
 

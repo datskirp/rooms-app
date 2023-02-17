@@ -11,6 +11,7 @@ return new class extends Migration
      *
      * @return void
      */
+    // TODO: Change active data type to boolean?
     public function up()
     {
         Schema::create('rooms', function (Blueprint $table) {

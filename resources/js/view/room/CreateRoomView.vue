@@ -93,9 +93,6 @@
                     ...this.room,
                     creator_id: window.Laravel.user.id,
                 };
-                console.log(roomData);
-                console.log(toRaw(roomData.users));
-                console.log(toRaw(roomData.questions));
                 this.promiseHandling(this.axios.post(`/api/v1/rooms/`, roomData));  ///api/v1/rooms/
             },
             promiseHandling(promise) {

@@ -36,9 +36,8 @@ class Room extends Model
         return $this->belongsToMany(Question::class, 'room_question');
     }
 
-    // TODO: Проверить работу метода
     public function participants(): HasManyThrough
     {
-        return $this->hasManyThrough(User::class, RoomUser::class, 'room_id', 'user_email', 'id', 'id');
+        return $this->hasManyThrough(User::class, RoomUser::class, 'room_id', 'email', 'id', 'user_email');
     }
 }

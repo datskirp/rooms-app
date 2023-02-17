@@ -3,7 +3,7 @@
 <br>
 
 <p>Please, use this link to enter:</p>
-<a href="{{ url('room/' . $roomLink) }}">{{ url('room/' . $roomLink) }}</a>
+<a href="{{ url('room/open/' . $roomLink) }}">{{ url('room/open/' . $roomLink) }}</a>
 
 <br><br>
 

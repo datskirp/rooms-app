@@ -19,17 +19,16 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        echo "hello ". Carbon::now() . PHP_EOL;
-        $roomsToOpen = DB::table('rooms')
-            ->whereDate('start_on', '>=', Carbon::today())
-            ->whereDate('close_on', '<=', Carbon::today())
+        $roomsToOpen = Room::whereDate('start_on', '<=', Carbon::today())
+            ->whereDate('close_on', '>=', Carbon::today())
+            ->whereTime('open_at', '=', Carbon::now())
             ->where('active', '=', 0)
             ->get();
 
         foreach ($roomsToOpen as $room) {
-            var_dump($room->id);
             $users = RoomUser::where('room_id', $room->id)->get();
             $room->active = 1;
+            $room->save();
             foreach ($users as $user) {
                 $schedule->command('mail:roomopen', [
                     $room->name,

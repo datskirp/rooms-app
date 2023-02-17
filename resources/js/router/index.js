@@ -3,6 +3,8 @@ import LoginView from '../view/LoginView.vue';
 import HomeView from "../view/HomeView.vue";
 import CreateRoom from "../view/room/CreateRoomView.vue";
 import Home from "../view/Home.vue";
+import OpenedRoom from "../view/room/OpenedRoom.vue";
+import NotFound from "../view/NotFound.vue";
 
 const routes = [
   {
@@ -28,8 +30,20 @@ const routes = [
                     default: CreateRoom,
                 },
             },
+            {
+                path: 'room/open/:link/',
+                name: 'room.open',
+                components: {
+                    default: OpenedRoom,
+                }
+            }
         ]
-    }
+    },
+    {
+        path: '/404',
+        name: '404',
+        component: NotFound,
+    },
 ];
 
 const router = createRouter({

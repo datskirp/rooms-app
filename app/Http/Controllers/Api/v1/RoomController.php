@@ -6,6 +6,7 @@ use App\Exceptions\NotFoundException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AddRoomRequest;
 use App\Models\Room;
+use App\Models\UserRoomQuestionAnswer;
 use App\Services\RoomService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -29,25 +30,17 @@ class RoomController extends ApiController
         return response()->json(['data' => $rooms]);
     }
 
-    // TODO: provide validation rules
+    // TODO: provide validation rules and change $request->post to $request->validated
     public function create(AddRoomRequest $request): JsonResponse
     {
-        $roomResource = $this->roomService->createRoom(
-            $request->post(),
-        );
-        return $this->successResponse(
-            data: $roomResource->resolve(),
-            code: Response::HTTP_CREATED,
-        );
-
         try {
+            $roomResource = $this->roomService->createRoom(
+                $request->post(),
+            );
 
-
-
-        } catch (NotFoundException $error) {
-            return $this->clientErrorsResponse(
-                message: $error->getMessage(),
-                code: Response::HTTP_NOT_FOUND,
+            return $this->successResponse(
+                data: $roomResource->resolve(),
+                code: Response::HTTP_CREATED,
             );
         } catch (Exception $error) {
             return $this->serverErrorResponse();
@@ -72,6 +65,23 @@ class RoomController extends ApiController
         return response()->json(['data' => $room]);
     }
 
+    // TODO: add try catch block
+    public function showByLink(string $link, string $userEmail): JsonResponse
+    {
+        $roomResource = $this->roomService->getRoomByLink($link, $userEmail);
+
+        return $this->successResponse(
+            data: $roomResource->resolve(),
+            code: Response::HTTP_CREATED,
+        );
+        /*
+        try {
+
+        } catch (Exception $error) {
+            return $this->serverErrorResponse();
+        }
+        */
+    }
     /**
      * Show the form for editing the specified resource.
      *

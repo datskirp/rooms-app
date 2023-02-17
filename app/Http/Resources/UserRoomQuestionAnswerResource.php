@@ -2,10 +2,11 @@
 
 namespace App\Http\Resources;
 
+use App\Models\RoomQuestion;
 use App\Models\RoomUser;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class RoomResource extends JsonResource
+class UserRoomQuestionAnswerResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,16 +18,10 @@ class RoomResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
-            'open_at' => $this->open_at,
-            'start_on' => $this->start_on,
-            'close_on' => $this->close_on,
             'user_id' => $this->user_id,
-            'link' => $this->link,
-            'active' => $this->active,
-            'user_emails' => RoomUser::where('room_id', $this->id)->get(),
-            'auth_participants' => $this->participants,
-            'questions' => $this->questions,
+            'room_question_id' => $this->room_question_id,
+            'answer' => $this->answer,
+            'question_id' => RoomQuestion::find($this->room_question_id)->question_id,
         ];
     }
 }

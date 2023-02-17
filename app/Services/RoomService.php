@@ -4,16 +4,23 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Events\ParticipantJoined;
+use App\Exceptions\NotFoundException;
 use App\Http\Resources\RoomResource;
+use App\Http\Resources\UserRoomQuestionAnswerResource;
 use App\Models\Room;
+use App\Models\RoomQuestion;
 use App\Models\RoomUser;
 use App\Models\User;
+use App\Models\UserRoomQuestionAnswer;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class RoomService
 {
-    public function createRoom(array $roomData)
+    // TODO: send email to participants about room creation
+    public function createRoom(array $roomData): RoomResource
     {
         $room = Room::create([
             'name' => $roomData['name'],
@@ -39,6 +46,7 @@ class RoomService
             RoomUser::insert([
                 'user_email' => $user,
                 'room_id' => $id,
+                'active' => false,
             ]);
         }
     }
@@ -52,52 +60,40 @@ class RoomService
 
         return $questionIds;
     }
-    /**
-     * @return array<string>
-     */
-    public function getAll(): string
+
+    public function getRoomByLink(string $link, string $userEmail): RoomResource
     {
-        return User::all()->toJson();
-    }
+        $room = Room::where('link', $link)->where('active', 1)->first();
+        //$roomUser = RoomUser::where('user_email', auth()->user()->email)->first();
 
-    /**
-     * @throws NotFoundException
-     * @throws Exception
-     */
-    public function getUserById(int $userId): UserResource
-    {
-        $user = $this->findUser($userId);
-
-        return new UserResource($user);
-    }
-
-    public function createUser(string $name, string $lastName, string $email): User
-    {
-        return User::firstOrCreate(['email' => $email], [
-            'first_name' => $name,
-            'last_name' => $lastName,
-            'email' => $email,
-        ]);
-    }
-
-    /**
-     * @throws NotFoundException
-     * @throws Exception
-     */
-    private function findUser(int $userId): User
-    {
-        $user = User::with('department', 'languages', 'resumes', 'resumes.skills')
-            ->where('id', $userId)
-            ->first();
-
-        if (!$user) {
+        if (!$room) {
             throw new NotFoundException(
-                sprintf('Not found user with id %d.', $userId),
+                sprintf('Room is not found'),
             );
         }
+        $roomUser = RoomUser::where('user_email', $userEmail)->where('room_id', $room->id)->first();
+        $roomUser->active = true;
+        $roomUser->timestamps = false;
+        $roomUser->save();
 
-        /** @var $user User */
-        return $user;
+        broadcast(new ParticipantJoined(RoomUser::all()->toArray()));
+
+        return new RoomResource($room);
+    }
+
+    public function saveAnswer(array $answer): UserRoomQuestionAnswerResource
+    {
+        $roomQuestionId = RoomQuestion::where('room_id', $answer['room_id'])
+            ->where('question_id', $answer['question_id'])
+            ->first();
+
+        $userRoomQuestionAnswer = UserRoomQuestionAnswer::create([
+            'user_id' => $answer['user_id'],
+            'room_question_id' => $roomQuestionId->id,
+            'answer' => $answer['answer'],
+        ]);
+
+        return new UserRoomQuestionAnswerResource($userRoomQuestionAnswer);
     }
 }
 

@@ -27,7 +27,7 @@ Route::prefix('login/google')->name('google.')->group(function () {
 
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
-Route::post('/rooms', [RoomController::class, 'create']);
+//Route::post('/rooms', [RoomController::class, 'create']);
 
 /* vue */
 Route::any('{all}', function () {
